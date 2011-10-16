@@ -1,6 +1,9 @@
 import jpype
 import urllib2
+import socket
 import chardet
+
+socket.setdefaulttimeout(15)
 
 InputSource        = jpype.JClass('org.xml.sax.InputSource')
 StringReader       = jpype.JClass('java.io.StringReader')
