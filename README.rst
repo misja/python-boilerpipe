@@ -31,8 +31,8 @@ If no extractor is passed the DefaultExtractor will be used by default.
 
 ::
 
-    import boilerpipe
-    extractor = boilerpipe.extract.Extractor(extractor='ArticleExtractor')
+    from boilerpipe.extract import Extractor
+    extractor = Extractor(extractor='ArticleExtractor')
 
 The extractor either accepts HTML or a url as input, either pass ``url`` or ``html`` as a keyword argument::
 
