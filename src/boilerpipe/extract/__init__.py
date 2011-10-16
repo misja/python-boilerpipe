@@ -33,8 +33,8 @@ class Extractor(object):
             if encoding.lower() == 'text/html':
                 encoding = chardet.detect(data)['encoding']
             data     = unicode(data, encoding)
-        elif kwargs.get('text'):
-            data = kwargs['text']
+        elif kwargs.get('html'):
+            data = kwargs['html']
         else:
             raise Exception('No text or url provided')
 
