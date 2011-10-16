@@ -27,6 +27,8 @@ The constructor takes a keyword argment ``extractor``, being one of the availabl
 - LargestContentExtractor
 - NumWordsRulesExtractor
 
+If no extractor is passed the DefaultExtractor will be used by default.
+
 ::
 
     import boilerpipe
