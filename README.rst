@@ -32,7 +32,7 @@ The constructor takes a keyword argment ``extractor``, being one of the availabl
     import boilerpipe
     extractor = boilerpipe.extract.Extractor(extractor='ArticleExtractor')
 
-The extractor eiter accepts HTML or a url as input, either pass ``url`` or ``html`` as a keyword argument::
+The extractor either accepts HTML or a url as input, either pass ``url`` or ``html`` as a keyword argument::
 
 	extracted_text = extractor.getText(url=your_url)
 	
