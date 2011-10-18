@@ -27,7 +27,7 @@ class Extractor(object):
     
     def __init__(self, extractor='DefaultExtractor'):
         self.extractor = jpype.JClass(
-          "de.l3s.boilerpipe.extractors."+extractor).getInstance()
+            "de.l3s.boilerpipe.extractors."+extractor).getInstance()
 
     def _source(self, **kwargs):
         if kwargs.get('url'):
@@ -59,3 +59,21 @@ class Extractor(object):
         self.extractor.process(source[0])
         highlighter = HTMLHighlighter.newExtractingInstance()
         return highlighter.process(source[0], source[1])
+    
+    def getImages(self, **kwargs):
+        source = self._source(**kwargs)
+        self.extractor.process(source[0])
+        extractor = jpype.JClass(
+            "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
+        images = extractor.process(source[0], source[1])
+        jpype.java.util.Collections.sort(images)
+        images = [
+            {
+                'src'   : image.getSrc(),
+                'width' : image.getWidth(),
+                'height': image.getHeight(),
+                'alt'   : image.getAlt(),
+                'area'  : image.getArea()
+            } for image in images
+        ]
+        return images
