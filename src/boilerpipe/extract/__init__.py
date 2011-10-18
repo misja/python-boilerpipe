@@ -21,6 +21,7 @@ class Extractor(object):
     - KeepEverythingWithMinKWordsExtractor
     - LargestContentExtractor
     - NumWordsRulesExtractor
+    - CanolaExtractor
     """
     extractor = None
     

@@ -26,6 +26,7 @@ The constructor takes a keyword argment ``extractor``, being one of the availabl
 - KeepEverythingWithMinKWordsExtractor
 - LargestContentExtractor
 - NumWordsRulesExtractor
+- CanolaExtractor
 
 If no extractor is passed the DefaultExtractor will be used by default.
 
