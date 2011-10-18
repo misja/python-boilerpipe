@@ -35,9 +35,11 @@ class Extractor(object):
             encoding = request.headers['content-type'].split('charset=')[-1]
             if encoding.lower() == 'text/html':
                 encoding = chardet.detect(data)['encoding']
-            data     = unicode(data, encoding)
+            data = unicode(data, encoding)
         elif kwargs.get('html'):
             data = kwargs['html']
+            if isinstance(data, basestring):
+                data = unicode(data, chardet.detect(data)['encoding'])
         else:
             raise Exception('No text or url provided')
 
