@@ -39,7 +39,7 @@ class Extractor(object):
             data = unicode(data, encoding)
         elif kwargs.get('html'):
             data = kwargs['html']
-            if isinstance(data, basestring):
+            if not isinstance(data, unicode):
                 data = unicode(data, chardet.detect(data)['encoding'])
         else:
             raise Exception('No text or url provided')
