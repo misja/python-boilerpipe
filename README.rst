@@ -28,17 +28,19 @@ The constructor takes a keyword argment ``extractor``, being one of the availabl
 - NumWordsRulesExtractor
 - CanolaExtractor
 
-If no extractor is passed the DefaultExtractor will be used by default.
+If no extractor is passed the DefaultExtractor will be used by default. Additional keyword arguments are either ``html`` for HTML text or ``url``.
 
 ::
 
     from boilerpipe.extract import Extractor
-    extractor = Extractor(extractor='ArticleExtractor')
+    extractor = Extractor(extractor='ArticleExtractor', url=your_url)
 
-The extractor either accepts HTML or a url as input, either pass ``url`` or ``html`` as a keyword argument::
+Then, to extract relevant content:
 
-	extracted_text = extractor.getText(url=your_url)
+::
+
+	extracted_text = extractor.getText()
 	
-	extracted_html = extractor.getHTML(url=your_url)
+	extracted_html = extractor.getHTML()
 
 .. _Boilerpipe: http://code.google.com/p/boilerpipe/ 

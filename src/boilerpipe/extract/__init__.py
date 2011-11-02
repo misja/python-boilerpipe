@@ -24,48 +24,43 @@ class Extractor(object):
     - CanolaExtractor
     """
     extractor = None
+    source    = None
+    data      = None
     
-    def __init__(self, extractor='DefaultExtractor'):
+    def __init__(self, extractor='DefaultExtractor', **kwargs):
         self.extractor = jpype.JClass(
             "de.l3s.boilerpipe.extractors."+extractor).getInstance()
-
-    def _source(self, **kwargs):
         if kwargs.get('url'):
-            request  = urllib2.urlopen(kwargs['url'])
-            data     = request.read()
-            encoding = request.headers['content-type'].split('charset=')[-1]
+            request   = urllib2.urlopen(kwargs['url'])
+            self.data = request.read()
+            encoding  = request.headers['content-type'].split('charset=')[-1]
             if encoding.lower() == 'text/html':
-                encoding = chardet.detect(data)['encoding']
-            data = unicode(data, encoding)
+                encoding = chardet.detect(self.data)['encoding']
+            self.data = unicode(self.data, encoding)
         elif kwargs.get('html'):
-            data = kwargs['html']
-            if not isinstance(data, unicode):
-                data = unicode(data, chardet.detect(data)['encoding'])
+            self.data = kwargs['html']
+            if not isinstance(self.data, unicode):
+                self.data = unicode(self.data, chardet.detect(self.data)['encoding'])
         else:
             raise Exception('No text or url provided')
 
-        reader = StringReader(data)
-        source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
-
-        return (source, data)
+        reader = StringReader(self.data)
+        self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
     
-    def getText(self, **kwargs):
-        source = self._source(**kwargs)[0]
-        self.extractor.process(source)
-        return source.getContent()
+    def getText(self):
+        self.extractor.process(self.source)
+        return self.source.getContent()
     
-    def getHTML(self, **kwargs):
-        source = self._source(**kwargs)
-        self.extractor.process(source[0])
+    def getHTML(self):
+        self.extractor.process(self.source)
         highlighter = HTMLHighlighter.newExtractingInstance()
-        return highlighter.process(source[0], source[1])
+        return highlighter.process(self.source, self.data)
     
-    def getImages(self, **kwargs):
-        source = self._source(**kwargs)
-        self.extractor.process(source[0])
+    def getImages(self):
+        self.extractor.process(self.source)
         extractor = jpype.JClass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
-        images = extractor.process(source[0], source[1])
+        images = extractor.process(self.source, self.data)
         jpype.java.util.Collections.sort(images)
         images = [
             {
