@@ -46,18 +46,16 @@ class Extractor(object):
 
         reader = StringReader(self.data)
         self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
+        self.extractor.process(self.source)
     
     def getText(self):
-        self.extractor.process(self.source)
         return self.source.getContent()
     
     def getHTML(self):
-        self.extractor.process(self.source)
         highlighter = HTMLHighlighter.newExtractingInstance()
         return highlighter.process(self.source, self.data)
     
     def getImages(self):
-        self.extractor.process(self.source)
         extractor = jpype.JClass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
         images = extractor.process(self.source, self.data)
