@@ -29,7 +29,7 @@ class Extractor(object):
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         self.extractor = jpype.JClass(
-            "de.l3s.boilerpipe.extractors."+extractor).getInstance()
+            "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
         if kwargs.get('url'):
             request   = urllib2.urlopen(kwargs['url'])
             self.data = request.read()
