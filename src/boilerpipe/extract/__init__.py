@@ -28,6 +28,7 @@ class Extractor(object):
     data      = None
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
+        self._threadSafe()
         self.extractor = jpype.JClass(
             "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
         if kwargs.get('url'):
