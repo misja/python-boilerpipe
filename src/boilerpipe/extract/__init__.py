@@ -2,6 +2,8 @@ import jpype
 import urllib2
 import socket
 import chardet
+import time
+from threading import activeCount
 
 socket.setdefaulttimeout(15)
 
@@ -50,8 +52,15 @@ class Extractor(object):
         self.extractor.process(self.source)
     
     def _threadSafe(self):
-        if jpype.isThreadAttachedToJVM() == False:
-            jpype.attachThreadToJVM()
+        """
+        When threading, somehow the JVM has started but isn't 
+        ready yet when attaching the thread. Skipping a couple
+        of cycles seems to help in this case.
+        """
+        if activeCount() > 1:
+            if jpype.isThreadAttachedToJVM() == False:
+                jpype.attachThreadToJVM()
+                time.sleep(0.5)
 
     def getText(self):
         self._threadSafe()
