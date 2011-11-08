@@ -50,7 +50,7 @@ class Extractor(object):
             if threading.activeCount() > 1:
                 if jpype.isThreadAttachedToJVM() == False:
                     jpype.attachThreadToJVM()
-                lock.acquire()
+            lock.acquire()
             
             self.extractor = jpype.JClass(
                 "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
