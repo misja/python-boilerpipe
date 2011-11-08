@@ -3,9 +3,10 @@ import urllib2
 import socket
 import chardet
 import time
-from threading import activeCount
+import threading
 
 socket.setdefaulttimeout(15)
+lock = threading.Lock()
 
 InputSource        = jpype.JClass('org.xml.sax.InputSource')
 StringReader       = jpype.JClass('java.io.StringReader')
@@ -30,9 +31,6 @@ class Extractor(object):
     data      = None
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
-        self._threadSafe()
-        self.extractor = jpype.JClass(
-            "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
         if kwargs.get('url'):
             request   = urllib2.urlopen(kwargs['url'])
             self.data = request.read()
@@ -47,32 +45,30 @@ class Extractor(object):
         else:
             raise Exception('No text or url provided')
 
+        try:
+            # make it thread-safe
+            if threading.activeCount() > 1:
+                if jpype.isThreadAttachedToJVM() == False:
+                    jpype.attachThreadToJVM()
+                lock.acquire()
+            
+            self.extractor = jpype.JClass(
+                "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
+        finally:
+            lock.release()
+    
         reader = StringReader(self.data)
         self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
         self.extractor.process(self.source)
     
-    def _threadSafe(self):
-        """
-        When threading, somehow the JVM has started but isn't 
-        ready yet when attaching the thread. Skipping a couple
-        of cycles seems to help in this case.
-        """
-        if activeCount() > 1:
-            if jpype.isThreadAttachedToJVM() == False:
-                jpype.attachThreadToJVM()
-                time.sleep(0.5)
-
     def getText(self):
-        self._threadSafe()
         return self.source.getContent()
     
     def getHTML(self):
-        self._threadSafe()
         highlighter = HTMLHighlighter.newExtractingInstance()
         return highlighter.process(self.source, self.data)
     
     def getImages(self):
-        self._threadSafe()
         extractor = jpype.JClass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
         images = extractor.process(self.source, self.data)
