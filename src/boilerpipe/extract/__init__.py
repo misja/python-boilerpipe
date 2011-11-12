@@ -2,7 +2,6 @@ import jpype
 import urllib2
 import socket
 import chardet
-import time
 import threading
 
 socket.setdefaulttimeout(15)
