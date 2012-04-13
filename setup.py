@@ -45,6 +45,7 @@ setup(
       package_data = {
           'boilerpipe': package_data('boilerpipe')
       },
+      zip_safe = False,
       author = "Misja Hoebe",
       author_email = "misja.hoebe@gmail.com",
       description = "Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages"
