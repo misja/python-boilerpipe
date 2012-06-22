@@ -33,7 +33,7 @@ class Extractor(object):
         if kwargs.get('url'):
             request   = urllib2.urlopen(kwargs['url'])
             self.data = request.read()
-            encoding  = request.headers['content-type'].split('charset=')[-1]
+            encoding  = request.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
                 encoding = chardet.detect(self.data)['encoding']
             self.data = unicode(self.data, encoding)
