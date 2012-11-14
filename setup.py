@@ -41,7 +41,7 @@ setup(
       version = __version__,
       packages = find_packages('src'),
       package_dir = {'':'src'},
-      install_requires = ['jpype', 'chardet'],
+      install_requires = ['jnius', 'chardet'],
       package_data = {
           'boilerpipe': package_data('boilerpipe')
       },

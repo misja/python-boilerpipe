@@ -1,16 +1,15 @@
-import jpype
 import urllib2
 import socket
 import chardet
 import threading
+from jnius import autoclass
 
 socket.setdefaulttimeout(15)
-lock = threading.Lock()
 
-InputSource        = jpype.JClass('org.xml.sax.InputSource')
-StringReader       = jpype.JClass('java.io.StringReader')
-HTMLHighlighter    = jpype.JClass('de.l3s.boilerpipe.sax.HTMLHighlighter')
-BoilerpipeSAXInput = jpype.JClass('de.l3s.boilerpipe.sax.BoilerpipeSAXInput')
+InputSource        = autoclass('org.xml.sax.InputSource')
+StringReader       = autoclass('java.io.StringReader')
+HTMLHighlighter    = autoclass('de.l3s.boilerpipe.sax.HTMLHighlighter')
+BoilerpipeSAXInput = autoclass('de.l3s.boilerpipe.sax.BoilerpipeSAXInput')
 
 class Extractor(object):
     """
@@ -43,20 +42,11 @@ class Extractor(object):
                 self.data = unicode(self.data, chardet.detect(self.data)['encoding'])
         else:
             raise Exception('No text or url provided')
-
-        try:
-            # make it thread-safe
-            if threading.activeCount() > 1:
-                if jpype.isThreadAttachedToJVM() == False:
-                    jpype.attachThreadToJVM()
-            lock.acquire()
             
-            self.extractor = jpype.JClass(
-                "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
-        finally:
-            lock.release()
+        self.extractor = autoclass(
+            "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
     
-        reader = StringReader(self.data)
+        reader = StringReader(self.data.encode('utf-8'))
         self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
         self.extractor.process(self.source)
     
@@ -68,10 +58,10 @@ class Extractor(object):
         return highlighter.process(self.source, self.data)
     
     def getImages(self):
-        extractor = jpype.JClass(
+        extractor = autoclass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
         images = extractor.process(self.source, self.data)
-        jpype.java.util.Collections.sort(images)
+        autoclass('java.util.Collections').sort(images)
         images = [
             {
                 'src'   : image.getSrc(),
