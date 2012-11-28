@@ -54,7 +54,7 @@ class Extractor(object):
         self.extractor.process(self.source)
     
     def getText(self):
-        return self.source.getContent().encode('utf-8')
+        return self.source.getContent().decode('utf-8')
     
     def getHTML(self):
         highlighter = HTMLHighlighter.newExtractingInstance()
