@@ -54,11 +54,11 @@ class Extractor(object):
         self.extractor.process(self.source)
     
     def getText(self):
-        return self.source.getContent()
+        return self.source.getContent().encode('utf-8')
     
     def getHTML(self):
         highlighter = HTMLHighlighter.newExtractingInstance()
-        return highlighter.process(self.source, self.data)
+        return highlighter.process(self.source, self.data.encode('utf-8')).decode('utf-8')
     
     def getImages(self):
         extractor = autoclass(
