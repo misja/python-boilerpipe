@@ -63,7 +63,7 @@ class Extractor(object):
     def getImages(self):
         extractor = autoclass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
-        images = extractor.process(self.source, self.data)
+        images = extractor.process(self.source, self.data.encode('utf-8'))
         autoclass('java.util.Collections').sort(images)
         images = [
             {
