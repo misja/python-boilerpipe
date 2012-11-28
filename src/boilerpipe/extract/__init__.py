@@ -47,7 +47,10 @@ class Extractor(object):
             "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
     
         reader = StringReader(self.data.encode('utf-8'))
-        self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
+        source = InputSource()
+        source.setCharacterStream(reader)
+         
+        self.source = BoilerpipeSAXInput(source).getTextDocument()
         self.extractor.process(self.source)
     
     def getText(self):
