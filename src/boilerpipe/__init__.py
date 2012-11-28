@@ -7,4 +7,4 @@ for top, dirs, files in os.walk(imp.find_module('boilerpipe')[1]+'/data'):
         if nm.lower().endswith('jar'):
             jars.append(os.path.join(top, nm))
 
-os.putenv('CLASSPATH', os.pathsep.join(jars))
+os.environ['CLASSPATH'] = os.pathsep.join(jars)
