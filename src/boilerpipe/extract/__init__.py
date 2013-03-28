@@ -28,12 +28,14 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
+    headers   = {'User-Agent': 'Mozilla/5.0'}
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            request   = urllib2.urlopen(kwargs['url'])
-            self.data = request.read()
-            encoding  = request.headers['content-type'].lower().split('charset=')[-1]
+            request     = urllib2.Request(kwargs['url'], headers=self.headers)
+            connection  = urllib2.urlopen(request)
+            self.data   = connection.read()
+            encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
                 encoding = chardet.detect(self.data)['encoding']
             self.data = unicode(self.data, encoding)
