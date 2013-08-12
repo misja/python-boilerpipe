@@ -4,12 +4,13 @@ import urllib
 import tarfile
 from setuptools import setup, find_packages
 
-__version__ = '1.2.0'
+__version__ = '1.2.0.0' # Maintain an extra version digit for enhancements to this library
+__boilerpipe_version__ = '1.2.0'
 
 def getjars(package, rootdir):
-    base   = "boilerpipe-%s/" % __version__
-    jar    = "boilerpipe-%s.jar" % __version__
-    url    = "http://boilerpipe.googlecode.com/files/boilerpipe-%s-bin.tar.gz" % __version__
+    base   = "boilerpipe-%s/" % __boilerpipe_version__
+    jar    = "boilerpipe-%s.jar" % __boilerpipe_version__
+    url    = "http://boilerpipe.googlecode.com/files/boilerpipe-%s-bin.tar.gz" % __boilerpipe_version__
     
     if os.path.exists(rootdir+'/'+base):
         return
@@ -39,7 +40,7 @@ def package_data(package, **kwargs):
 setup(
       name = 'boilerpipe',
       version = __version__,
-      packages = find_packages('src'),
+      packages = ['boilerpipe'],
       package_dir = {'':'src'},
       install_requires = ['JPype1', 'chardet'],
       package_data = {
@@ -48,5 +49,18 @@ setup(
       zip_safe = False,
       author = "Misja Hoebe",
       author_email = "misja.hoebe@gmail.com",
-      description = "Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages"
+      maintainer = 'Matthew Russell',
+      maintainer_email = 'ptwobrussell@gmail.com',
+      url = 'https://github.com/ptwobrussell/python-boilerpipe/',
+      description = "Python interface to Boilerpipe v%s (Java) - Boilerplate Removal and Fulltext Extraction from HTML pages" % (__boilerpipe_version__,),
+      classifiers=[
+          'Development Status :: 5 - Production/Stable',
+          'Environment :: Console',
+          'Intended Audience :: Developers',
+          'License :: OSI Approved :: Apache 2.0 License',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python :: 2.7',
+          'Natural Language :: English',
+      ],
+      keywords='boilerpipe'
 )
