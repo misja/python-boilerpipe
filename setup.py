@@ -57,7 +57,7 @@ setup(
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',
           'Intended Audience :: Developers',
-          'License :: OSI Approved :: Apache 2.0 License',
+          'License :: OSI Approved :: Apache Software License',
           'Operating System :: OS Independent',
           'Programming Language :: Python :: 2.7',
           'Natural Language :: English',
