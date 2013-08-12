@@ -1,52 +1,46 @@
-import os
-import fnmatch
-import urllib
 import tarfile
-from setuptools import setup, find_packages
+from fnmatch import fnmatch
+from os.path import basename, exists, dirname, abspath, join
+from distutils.core import setup
+
+try:
+    from urllib import urlretrieve
+except:
+    from urllib.request import urlretrieve
 
 __version__ = '1.2.0'
+DATAPATH = join(abspath(dirname((__file__))), 'src/boilerpipe/data')
 
-def getjars(package, rootdir):
-    base   = "boilerpipe-%s/" % __version__
-    jar    = "boilerpipe-%s.jar" % __version__
-    url    = "http://boilerpipe.googlecode.com/files/boilerpipe-%s-bin.tar.gz" % __version__
-    
-    if os.path.exists(rootdir+'/'+base):
-        return
-    
-    handle = tarfile.open(urllib.urlretrieve(url)[0], mode='r:gz')
-    files  = [handle.getmember(name) for name in handle.getnames() if name == base+jar or name.startswith(base+'lib')]
-    
-    handle.extractall(rootdir, files)
 
-def package_data(package, **kwargs):
-    fileList = []
-    rootdir  = "src/%s/data" % package
+def download_jars(datapath, version=__version__):
+    tgz_url = 'https://boilerpipe.googlecode.com/files/boilerpipe-{0}-bin.tar.gz'.format(version)
+    tgz_name = basename(tgz_url)
+    if not exists(tgz_name):
+        urlretrieve(tgz_url, tgz_name)
+    tar = tarfile.open(tgz_name, mode='r:gz')
+    for tarinfo in tar.getmembers():
+        if not fnmatch(tarinfo.name, '*.jar'):
+            continue
+        tar.extract(tarinfo, datapath)
 
-    getjars(package, rootdir)
-    
-    exclude=['']
-    if kwargs and kwargs['exclude']:
-        exclude=kwargs['exclude']
-    for root, subFolders, files in os.walk(rootdir):
-        for file in files:
-            for pattern in exclude:
-                if not fnmatch.fnmatch(file, pattern):
-                    path = root.replace(rootdir,'data')
-                    fileList.append(os.path.join(path,file))
-    return fileList
+download_jars(datapath=DATAPATH)
 
 setup(
-      name = 'boilerpipe',
-      version = __version__,
-      packages = find_packages('src'),
-      package_dir = {'':'src'},
-      install_requires = ['jpype', 'chardet'],
-      package_data = {
-          'boilerpipe': package_data('boilerpipe')
-      },
-      zip_safe = False,
-      author = "Misja Hoebe",
-      author_email = "misja.hoebe@gmail.com",
-      description = "Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages"
+    name='boilerpipe',
+    version=__version__,
+    packages=['boilerpipe', 'boilerpipe.extract'],
+    package_dir={'': 'src'},
+    package_data={
+        'boilerpipe': [
+            'data/boilerpipe-{version}/boilerpipe-{version}.jar'.format(version=__version__),
+            'data/boilerpipe-{version}/lib/*.jar'.format(version=__version__),
+        ],
+    },
+    install_requires=[
+        'JPype1',
+        'chardet',
+    ],
+    author='Misja Hoebe',
+    author_email='misja.hoebe@gmail.com',
+    description='Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages'
 )
