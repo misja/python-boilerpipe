@@ -56,6 +56,7 @@ setup(
           'Natural Language :: English',
       ],
       keywords='boilerpipe',
+      license='Apache 2.0',
 
     description='Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages'
 )
