@@ -1,59 +1,52 @@
-import os
-import fnmatch
-import urllib
 import tarfile
-from setuptools import setup, find_packages
+from fnmatch import fnmatch
+from os.path import basename, exists, dirname, abspath, join
+from distutils.core import setup
 
-__version__ = '1.2.0.0' # Maintain an extra version digit for enhancements to this library
-__boilerpipe_version__ = '1.2.0'
+try:
+    from urllib import urlretrieve
+except:
+    from urllib.request import urlretrieve
 
-def getjars(package, rootdir):
-    base   = "boilerpipe-%s/" % __boilerpipe_version__
-    jar    = "boilerpipe-%s.jar" % __boilerpipe_version__
-    url    = "http://boilerpipe.googlecode.com/files/boilerpipe-%s-bin.tar.gz" % __boilerpipe_version__
-    
-    if os.path.exists(rootdir+'/'+base):
-        return
-    
-    handle = tarfile.open(urllib.urlretrieve(url)[0], mode='r:gz')
-    files  = [handle.getmember(name) for name in handle.getnames() if name == base+jar or name.startswith(base+'lib')]
-    
-    handle.extractall(rootdir, files)
+__version__ = '1.2.0.0'
+boilerpipe_version = '1.2.0'
+DATAPATH = join(abspath(dirname((__file__))), 'src/boilerpipe/data')
 
-def package_data(package, **kwargs):
-    fileList = []
-    rootdir  = "src/%s/data" % package
 
-    getjars(package, rootdir)
-    
-    exclude=['']
-    if kwargs and kwargs['exclude']:
-        exclude=kwargs['exclude']
-    for root, subFolders, files in os.walk(rootdir):
-        for file in files:
-            for pattern in exclude:
-                if not fnmatch.fnmatch(file, pattern):
-                    path = root.replace(rootdir,'data')
-                    fileList.append(os.path.join(path,file))
-    return fileList
+def download_jars(datapath, version=boilerpipe_version):
+    tgz_url = 'https://boilerpipe.googlecode.com/files/boilerpipe-{0}-bin.tar.gz'.format(version)
+    tgz_name = basename(tgz_url)
+    if not exists(tgz_name):
+        urlretrieve(tgz_url, tgz_name)
+    tar = tarfile.open(tgz_name, mode='r:gz')
+    for tarinfo in tar.getmembers():
+        if not fnmatch(tarinfo.name, '*.jar'):
+            continue
+        tar.extract(tarinfo, datapath)
+
+download_jars(datapath=DATAPATH)
 
 setup(
-      name = 'boilerpipe',
-      version = __version__,
-      packages = ['boilerpipe'],
-      package_dir = {'':'src'},
-      install_requires = ['JPype1', 'chardet'],
-      package_data = {
-          'boilerpipe': package_data('boilerpipe')
-      },
-      zip_safe = False,
-      author = "Misja Hoebe",
-      author_email = "misja.hoebe@gmail.com",
-      maintainer = 'Matthew Russell',
-      maintainer_email = 'ptwobrussell@gmail.com',
-      url = 'https://github.com/ptwobrussell/python-boilerpipe/',
-      description = "Python interface to Boilerpipe v%s (Java) - Boilerplate Removal and Fulltext Extraction from HTML pages" % (__boilerpipe_version__,),
-      classifiers=[
+    name='boilerpipe',
+    version=__version__,
+    packages=['boilerpipe', 'boilerpipe.extract'],
+    package_dir={'': 'src'},
+    package_data={
+        'boilerpipe': [
+            'data/boilerpipe-{version}/boilerpipe-{version}.jar'.format(version=boilerpipe_version),
+            'data/boilerpipe-{version}/lib/*.jar'.format(version=boilerpipe_version),
+        ],
+    },
+    install_requires=[
+        'JPype1',
+        'charade',
+    ],
+    author='Misja Hoebe',
+    author_email='misja.hoebe@gmail.com',
+    maintainer = 'Matthew Russell',
+    maintainer_email = 'ptwobrussell@gmail.com',
+    url = 'https://github.com/ptwobrussell/python-boilerpipe/',
+    classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',
           'Intended Audience :: Developers',
@@ -62,5 +55,7 @@ setup(
           'Programming Language :: Python :: 2.7',
           'Natural Language :: English',
       ],
-      keywords='boilerpipe'
+      keywords='boilerpipe',
+
+    description='Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages'
 )
