@@ -1,7 +1,7 @@
 import jpype
 import urllib2
 import socket
-import chardet
+import charade
 import threading
 
 socket.setdefaulttimeout(15)
@@ -37,12 +37,12 @@ class Extractor(object):
             self.data   = connection.read()
             encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
-                encoding = chardet.detect(self.data)['encoding']
+                encoding = charade.detect(self.data)['encoding']
             self.data = unicode(self.data, encoding)
         elif kwargs.get('html'):
             self.data = kwargs['html']
             if not isinstance(self.data, unicode):
-                self.data = unicode(self.data, chardet.detect(self.data)['encoding'])
+                self.data = unicode(self.data, charade.detect(self.data)['encoding'])
         else:
             raise Exception('No text or url provided')
 
