@@ -8,7 +8,7 @@ Configuration
 =============
 
 Dependencies:
-jpype, chardet
+jpype, charade
 
 The boilerpipe jar files will get fetched and included automatically when building the package.
 
