@@ -68,6 +68,9 @@ class Extractor(object):
     def getHTML(self):
         highlighter = HTMLHighlighter.newExtractingInstance()
         return highlighter.process(self.source, self.data)
+
+    def getTitle(self):
+        return self.source.getTitle()
     
     def getImages(self):
         extractor = jpype.JClass(
