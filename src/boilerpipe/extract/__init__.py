@@ -32,7 +32,7 @@ class Extractor(object):
 
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            response = requests.request('GET', kwargs['url'], headers=self.headers)
+            response = requests.request('GET', kwargs['url'], headers=self.headers, timeout=10)
             self.data = response.text
 
         elif kwargs.get('html'):

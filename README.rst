@@ -43,4 +43,6 @@ Then, to extract relevant content:
 	
 	extracted_html = extractor.getHTML()
 
+	extracted_title = extractor.getTitle()
+
 .. _Boilerpipe: http://code.google.com/p/boilerpipe/ 
