@@ -1,5 +1,6 @@
 import jpype
 import urllib2
+import requests
 import socket
 import charade
 import threading
@@ -32,10 +33,10 @@ class Extractor(object):
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            request     = urllib2.Request(kwargs['url'], headers=self.headers)
-            connection  = urllib2.urlopen(request)
-            self.data   = connection.read()
-            encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
+            request     =requests.get(kwargs['url'],headers=self.headers)#= urllib2.Request(kwargs['url'], headers=self.headers)
+            #connection   = urllib2.urlopen(request)
+            self.data   = request.text# connection.read()
+            encoding    = request.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
                 encoding = charade.detect(self.data)['encoding']
             self.data = unicode(self.data, encoding)
