@@ -8,8 +8,8 @@ try:
 except:
     from urllib.request import urlretrieve
 
-__version__ = '1.2.0.0'
-boilerpipe_version = '1.2.0'
+__version__ = '1.2.1.0'
+boilerpipe_version = '1.2.1'
 DATAPATH = join(abspath(dirname((__file__))), 'src/boilerpipe/data')
 
 
