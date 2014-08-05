@@ -33,9 +33,11 @@ class Extractor(object):
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            request     =requests.get(kwargs['url'],headers=self.headers)#= urllib2.Request(kwargs['url'], headers=self.headers)
-            #connection   = urllib2.urlopen(request)
-            self.data   = request.text# connection.read()
+            #request     =requests.get(kwargs['url'],headers=self.headers)
+            request = urllib2.Request(kwargs['url'])
+            connection   = urllib2.urlopen(request)
+            #self.data   = request.text
+            connection.read()
             encoding    = request.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
                 encoding = charade.detect(self.data)['encoding']
