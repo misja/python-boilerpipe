@@ -29,17 +29,12 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
-    headers   = {'User-Agent': 'Mozilla'}
+    headers   = {'User-Agent': 'Mozilla Firefox'}
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            request = urllib2.Request(kwargs['url'],headers=self.headers)
-            connection   = urllib2.urlopen(request)
-            connection.read()
-            encoding    = request.headers['content-type'].lower().split('charset=')[-1]
-            if encoding.lower() == 'text/html':
-                encoding = charade.detect(self.data)['encoding']
-            self.data = unicode(self.data, encoding)
+            response = requests.request('GET', kwargs['url'], headers=self.headers)
+            self.data = response.text
         elif kwargs.get('html'):
             self.data = kwargs['html']
             if not isinstance(self.data, unicode):
