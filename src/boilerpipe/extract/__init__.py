@@ -29,11 +29,11 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
-    headers   = {'User-Agent': 'Mozilla/5.0'}
+    #headers   = {'User-Agent': 'Mozilla/5.0'} , headers=self.headers
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            response = requests.request('GET', kwargs['url'], headers=self.headers)
+            response = requests.request('GET', kwargs['url'])
             self.data = response.text
         elif kwargs.get('html'):
             self.data = kwargs['html']
