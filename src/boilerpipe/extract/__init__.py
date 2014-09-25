@@ -29,7 +29,7 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
-    headers   = {'User-Agent': 'Mozilla/5.0'}
+    headers   = {'User-Agent': 'Mozilla'}
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
