@@ -1,0 +1,8 @@
+
+boilerpipe-1.2.0-bin.tar.gz
+
+*.jar
+
+build/lib/boilerpipe/__init__.py
+
+build/lib/boilerpipe/extract/__init__.py
