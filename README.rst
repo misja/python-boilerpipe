@@ -6,6 +6,8 @@ python-boilerpipe
 
 A python wrapper for Boilerpipe_, an excellent Java library for boilerplate removal and fulltext extraction from HTML pages. 
 
+
+
 Configuration
 =============
 
@@ -36,6 +38,8 @@ If no extractor is passed the DefaultExtractor will be used by default. Addition
 
     from boilerpipe.extract import Extractor
     extractor = Extractor(extractor='ArticleExtractor', url=your_url)
+    
+	``you can chose 'url' ,'html' or 'file' as second argment.
 
 Then, to extract relevant content:
 
@@ -46,3 +50,4 @@ Then, to extract relevant content:
 	extracted_html = extractor.getHTML()
 
 .. _Boilerpipe: http://code.google.com/p/boilerpipe/ 
+
