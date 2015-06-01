@@ -43,8 +43,8 @@ setup(
     ],
     author='Misja Hoebe',
     author_email='misja.hoebe@gmail.com',
-    maintainer = 'Matthew Russell',
-    maintainer_email = 'ptwobrussell@gmail.com',
+    maintainer = 'Matthew Russell','CaiMujia'
+    maintainer_email = 'ptwobrussell@gmail.com','caimujia@gmail.com'
     url = 'https://github.com/ptwobrussell/python-boilerpipe/',
     classifiers=[
           'Development Status :: 5 - Production/Stable',
