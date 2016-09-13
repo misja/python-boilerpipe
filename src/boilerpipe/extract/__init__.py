@@ -28,17 +28,39 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
-    headers   = {'User-Agent': 'Mozilla/5.0'}
+    headers   = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Connection": "keep-alive"
+    }
     
     def __init__(self, extractor='DefaultExtractor', **kwargs):
+
+        if kwargs.get('logger'):
+            self.logger = kwargs['logger']
+        else:
+            self.logger = None
+
         if kwargs.get('url'):
             request     = urllib2.Request(kwargs['url'], headers=self.headers)
-            connection  = urllib2.urlopen(request)
-            self.data   = connection.read()
-            encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
-            if encoding.lower() == 'text/html':
-                encoding = charade.detect(self.data)['encoding']
-            self.data = unicode(self.data, encoding)
+            try:
+                connection  = urllib2.urlopen(request)
+            except:
+                connection = None
+                if self.logger is not None:
+                    self.logger.exception( 'boilerpipe extractor failed on urlopen() for uri %s' % kwargs['url'] )
+
+            if connection is not None:
+                self.data   = connection.read()
+                encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
+                if encoding.lower() == 'text/html':
+                    encoding = charade.detect(self.data)['encoding']
+                self.data = unicode(self.data, encoding)
+            else:
+                if self.logger is not None:
+                    self.logger.debug('boilerpipe execution continues with empty document')
+                self.data = u''
+
         elif kwargs.get('html'):
             self.data = kwargs['html']
             if not isinstance(self.data, unicode):
