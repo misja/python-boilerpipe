@@ -1,5 +1,8 @@
 import jpype
-import urllib2
+try:
+    from urllib.request import Request, urlopen
+except ImportError:
+    from urllib2 import Request, urlopen
 import socket
 import charade
 import threading
@@ -29,20 +32,27 @@ class Extractor(object):
     source    = None
     data      = None
     headers   = {'User-Agent': 'Mozilla/5.0'}
-    
+
     def __init__(self, extractor='DefaultExtractor', **kwargs):
         if kwargs.get('url'):
-            request     = urllib2.Request(kwargs['url'], headers=self.headers)
-            connection  = urllib2.urlopen(request)
+            request     = Request(kwargs['url'], headers=self.headers)
+            connection  = urlopen(request)
             self.data   = connection.read()
             encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
                 encoding = charade.detect(self.data)['encoding']
-            self.data = unicode(self.data, encoding)
+            try:
+                self.data = unicode(self.data, encoding)
+            except NameError:
+                self.data = self.data.decode(encoding)
         elif kwargs.get('html'):
             self.data = kwargs['html']
-            if not isinstance(self.data, unicode):
-                self.data = unicode(self.data, charade.detect(self.data)['encoding'])
+            try:
+                if not isinstance(self.data, unicode):
+                    self.data = unicode(self.data, charade.detect(self.data)['encoding'])
+            except NameError:
+                if not isinstance(self.data, str):
+                    self.data = self.data.decode(charade.detect(self.data)['encoding'])        
         else:
             raise Exception('No text or url provided')
 
@@ -52,23 +62,23 @@ class Extractor(object):
                 if jpype.isThreadAttachedToJVM() == False:
                     jpype.attachThreadToJVM()
             lock.acquire()
-            
+
             self.extractor = jpype.JClass(
                 "de.l3s.boilerpipe.extractors."+extractor).INSTANCE
         finally:
             lock.release()
-    
+
         reader = StringReader(self.data)
         self.source = BoilerpipeSAXInput(InputSource(reader)).getTextDocument()
         self.extractor.process(self.source)
-    
+
     def getText(self):
         return self.source.getContent()
-    
+
     def getHTML(self):
         highlighter = HTMLHighlighter.newExtractingInstance()
         return highlighter.process(self.source, self.data)
-    
+
     def getImages(self):
         extractor = jpype.JClass(
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
