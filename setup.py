@@ -40,7 +40,7 @@ setup(
     },
     install_requires=[
         'JPype1',
-        'charade',
+        'chardet',
     ],
     author='Misja Hoebe',
     author_email='misja.hoebe@gmail.com',
