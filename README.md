@@ -1,7 +1,7 @@
 # python-boilerpipe
 
 
-A python wrapper for [Boilerpipe](http://code.google.com/p/boilerpipe/), an excellent Java library for boilerplate removal and fulltext extraction from HTML pages. 
+A python wrapper for [Boilerpipe](http://code.google.com/p/boilerpipe/), an excellent Java library for boilerplate removal and fulltext extraction from HTML pages.
 
 ## Configuration
 
@@ -9,7 +9,7 @@ A python wrapper for [Boilerpipe](http://code.google.com/p/boilerpipe/), an exce
 Dependencies:
 
  * jpype
- * charade
+ * chardet
 
 The boilerpipe jar files will get fetched and included automatically when building the package.
 
@@ -24,7 +24,7 @@ Fedora
 PIP
 
     sudo pip install JPype
-    sudo pip install charade
+    sudo pip install chardet
     sudo python setup.py install
 
 
@@ -51,7 +51,7 @@ If no extractor is passed the DefaultExtractor will be used by default. Addition
 
 Then, to extract relevant content:
 
-	extracted_text = extractor.getText()
-	
-	extracted_html = extractor.getHTML()
+    extracted_text = extractor.getText()
+
+    extracted_html = extractor.getHTML()
 
