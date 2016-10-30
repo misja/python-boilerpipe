@@ -4,7 +4,7 @@ try:
 except ImportError:
     from urllib2 import Request, urlopen
 import socket
-import charade
+import chardet
 import threading
 
 socket.setdefaulttimeout(15)
@@ -40,7 +40,7 @@ class Extractor(object):
             self.data   = connection.read()
             encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
-                encoding = charade.detect(self.data)['encoding']
+                encoding = chardet.detect(self.data)['encoding']
             try:
                 self.data = unicode(self.data, encoding)
             except NameError:
@@ -49,10 +49,10 @@ class Extractor(object):
             self.data = kwargs['html']
             try:
                 if not isinstance(self.data, unicode):
-                    self.data = unicode(self.data, charade.detect(self.data)['encoding'])
+                    self.data = unicode(self.data, chardet.detect(self.data)['encoding'])
             except NameError:
                 if not isinstance(self.data, str):
-                    self.data = self.data.decode(charade.detect(self.data)['encoding'])        
+                    self.data = self.data.decode(chardet.detect(self.data)['encoding'])
         else:
             raise Exception('No text or url provided')
 

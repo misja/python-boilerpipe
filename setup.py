@@ -8,7 +8,7 @@ try:
 except:
     from urllib.request import urlretrieve
 
-__version__ = '1.2.0.0'
+__version__ = '1.3.0.0'
 boilerpipe_version = '1.2.0'
 DATAPATH = join(abspath(dirname((__file__))), 'src/boilerpipe/data')
 
@@ -40,7 +40,7 @@ setup(
     },
     install_requires=[
         'JPype1',
-        'charade',
+        'chardet',
     ],
     author='Misja Hoebe',
     author_email='misja.hoebe@gmail.com',
