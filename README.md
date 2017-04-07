@@ -16,17 +16,26 @@ The boilerpipe jar files will get fetched and included automatically when buildi
 ## Installation
 
 
-Fedora
+**Fedora**
 
     sudo dnf install -y python2-jpype
 
 
-PIP
+**PIP**
 
-    sudo pip install JPype
-    sudo pip install chardet
+    pip install -r requirements.txt
     sudo python setup.py install
 
+
+**virtualenv**
+
+
+	virtualenv env
+	source env/bin/activate
+	pip install JPype1
+	pip install chardet
+	python setup.py install
+	
 
 ## Usage
 
@@ -54,4 +63,10 @@ Then, to extract relevant content:
     extracted_text = extractor.getText()
 
     extracted_html = extractor.getHTML()
+
+
+For `KeepEverythingWithMinKWordsExtractor` we have to specify `kMin` parameter ( which defaults to `1` for now:
+
+	extractor = Extractor(extractor='KeepEverythingWithMinKWordsExtractor', url=your_url, kMin=20)
+
 
