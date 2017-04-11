@@ -12,8 +12,6 @@ __version__ = '1.3.0.0'
 boilerpipe_version = '1.2.0'
 DATAPATH = join(abspath(dirname((__file__))), 'src/boilerpipe/data')
 
-
-
 def download_jars(datapath, version=boilerpipe_version):
     tgz_url = 'https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/boilerpipe/boilerpipe-{0}-bin.tar.gz'.format(version)
     tgz_name = basename(tgz_url)
@@ -44,20 +42,19 @@ setup(
     ],
     author='Misja Hoebe',
     author_email='misja.hoebe@gmail.com',
-    maintainer = 'Matthew Russell',
-    maintainer_email = 'ptwobrussell@gmail.com',
-    url = 'https://github.com/ptwobrussell/python-boilerpipe/',
+    maintainer='Matthew Russell',
+    maintainer_email='ptwobrussell@gmail.com',
+    url='https://github.com/ptwobrussell/python-boilerpipe/',
     classifiers=[
-          'Development Status :: 5 - Production/Stable',
-          'Environment :: Console',
-          'Intended Audience :: Developers',
-          'License :: OSI Approved :: Apache Software License',
-          'Operating System :: OS Independent',
-          'Programming Language :: Python :: 2.7',
-          'Natural Language :: English',
-      ],
-      keywords='boilerpipe',
-      license='Apache 2.0',
-
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.7',
+        'Natural Language :: English',
+    ],
+    keywords='boilerpipe',
+    license='Apache 2.0',
     description='Python interface to Boilerpipe, Boilerplate Removal and Fulltext Extraction from HTML pages'
 )
