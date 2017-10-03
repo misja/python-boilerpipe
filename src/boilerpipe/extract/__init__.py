@@ -3,11 +3,11 @@ try:
     from urllib.request import Request, urlopen
 except ImportError:
     from urllib2 import Request, urlopen
-import socket
 import chardet
 import threading
 
-socket.setdefaulttimeout(15)
+DEFAULT_URLOPEN_TIMEOUT = 15
+
 lock = threading.Lock()
 
 InputSource        = jpype.JClass('org.xml.sax.InputSource')
@@ -33,10 +33,10 @@ class Extractor(object):
     data      = None
     headers   = {'User-Agent': 'Mozilla/5.0'}
 
-    def __init__(self, extractor='DefaultExtractor', **kwargs):
+    def __init__(self, extractor='DefaultExtractor', timeout=DEFAULT_URLOPEN_TIMEOUT, **kwargs):
         if 'url' in kwargs:
             request     = Request(kwargs['url'], headers=self.headers)
-            connection  = urlopen(request)
+            connection  = urlopen(request, timeout=timeout)
             self.data   = connection.read()
             encoding    = connection.headers['content-type'].lower().split('charset=')[-1]
             if encoding.lower() == 'text/html':
