@@ -34,7 +34,7 @@ class Extractor(object):
     headers   = {'User-Agent': 'Mozilla/5.0'}
 
     def __init__(self, extractor='DefaultExtractor', **kwargs):
-        if kwargs.get('url'):
+        if 'url' in kwargs:
             request     = Request(kwargs['url'], headers=self.headers)
             connection  = urlopen(request)
             self.data   = connection.read()
@@ -45,7 +45,7 @@ class Extractor(object):
                 self.data = unicode(self.data, encoding)
             except NameError:
                 self.data = self.data.decode(encoding)
-        elif kwargs.get('html'):
+        elif 'html' in kwargs:
             self.data = kwargs['html']
             try:
                 if not isinstance(self.data, unicode):
@@ -54,7 +54,7 @@ class Extractor(object):
                 if not isinstance(self.data, str):
                     self.data = self.data.decode(chardet.detect(self.data)['encoding'])
         else:
-            raise Exception('No text or url provided')
+            raise Exception('No html or url provided')
 
         try:
             # make it thread-safe
