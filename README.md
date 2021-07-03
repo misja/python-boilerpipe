@@ -40,7 +40,7 @@ Checkout the code:
 
 Be sure to have set `JAVA_HOME` properly since `jpype` depends on this setting.
 
-The constructor takes a keyword argment `extractor`, being one of the available boilerpipe extractor types:
+The constructor takes a keyword argument `extractor`, being one of the available boilerpipe extractor types:
 
  - DefaultExtractor
  - ArticleExtractor
