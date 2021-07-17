@@ -31,7 +31,7 @@ class Extractor(object):
     extractor = None
     source    = None
     data      = None
-    headers   = {'User-Agent': 'Mozilla/5.0'}
+    headers   = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'}
 
     def __init__(self, extractor='DefaultExtractor', timeout=DEFAULT_URLOPEN_TIMEOUT, **kwargs):
         if 'url' in kwargs:
