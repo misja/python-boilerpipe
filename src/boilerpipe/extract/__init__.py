@@ -90,13 +90,12 @@ class Extractor(object):
             "de.l3s.boilerpipe.sax.ImageExtractor").INSTANCE
         images = extractor.process(self.source, self.data)
         jpype.java.util.Collections.sort(images)
-        images = [
+        return [
             {
-                'src'   : image.getSrc(),
-                'width' : image.getWidth(),
-                'height': image.getHeight(),
-                'alt'   : image.getAlt(),
-                'area'  : image.getArea()
-            } for image in images
+                'src'   : images[i].getSrc(),
+                'width' : images[i].getWidth(),
+                'height': images[i].getHeight(),
+                'alt'   : images[i].getAlt(),
+                'area'  : images[i].getArea()
+            } for i in range(len(images))
         ]
-        return images
