@@ -42,6 +42,16 @@ class Extractor(object):
             if encoding.lower() == 'text/html':
                 encoding = chardet.detect(self.data)['encoding']
             try:
+                import gzip
+                import StringIO
+                data = StringIO.StringIO(self.data)
+                gzipper = gzip.GzipFile(fileobj=data)
+                self.data = gzipper.read()
+                #self.data = gzip.decompress(self.data)
+            except Exception as inst:
+                #print inst
+                pass
+            try:
                 self.data = unicode(self.data, encoding)
             except NameError:
                 self.data = self.data.decode(encoding)
